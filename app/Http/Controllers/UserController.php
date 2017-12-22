@@ -68,9 +68,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        //
+        $input = request()->all();
+        $name = $input['name'];
+        $email = $input['email'];
+        $password = $input['password'];
+        $user = User::where('id',$id)->update([
+            'name'=>$name,
+            'password'=>$password,
+            'email'=>$email,
+        ]);
+        if($user){
+            return response()->json(['user'=>$user,'status'=>'success']);
+        }else{
+            return response()->json(['message'=>"Exitsn't User",'status'=>'error']);
+        }
     }
 
     /**
@@ -120,7 +133,7 @@ class UserController extends Controller
             $user = User::create([
                 'name'=>$name,
                 'password'=>$password,
-                'email'=>$name,
+                'email'=>$email,
             ]);
             if($user){
                 return response()->json(['user'=>$user,'status'=>'success']);
