@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
             $users[] = [
                 'name' => $faker->name,
                 'email' => $faker->unique()->email,
-                'password' => bcrypt('123456'),
+                'password' => '123456',
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.$i.'.jpg',
             ];
         }

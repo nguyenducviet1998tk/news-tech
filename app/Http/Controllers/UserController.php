@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Crypt;
 
 class UserController extends Controller
 {
@@ -80,5 +82,51 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * login
+     */
+    public function login(){
+        $input = request()->all();
+        $email = $input['email'];
+        $password = $input['password'];
+        $user = User::where('email',$email)->first();
+        if($user){
+            if($password==$user->password){
+                return response()->json(['user'=>$user,'status'=>'success']);
+            }else{
+                return response()->json(['message'=>"False password",'status'=>'error']);
+            }
+        }else{
+            return response()->json(['message'=>"Exitsn't User",'status'=>'error']);
+        }
+    }
+    
+    /**
+     * sign
+     */
+    public function sign(){
+        $input = request()->all();
+        $email = $input['email'];
+        $password = $input['password'];
+        $name = $input['name'];
+
+        $user = User::where('email',$email)->first();
+
+        if($user){
+            return response()->json(['message'=>"Exist account",'status'=>'error']);
+        }else{
+            $user = User::create([
+                'name'=>$name,
+                'password'=>$password,
+                'email'=>$name,
+            ]);
+            if($user){
+                return response()->json(['user'=>$user,'status'=>'success']);
+            }else{
+                return response()->json(['message'=>"Not create User",'status'=>'error']);
+            }
+        }
     }
 }
